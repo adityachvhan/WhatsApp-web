@@ -1,0 +1,29 @@
+package com.corejavahub.repository;
+
+import java.util.List;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.corejavahub.exception.ChatException;
+import com.corejavahub.exception.UserException;
+import com.corejavahub.model.Chat;
+import com.corejavahub.service.GroupChatRequest;
+
+public interface ChatRepository extends JpaRepository<Chat, Integer> {
+
+	public Chat createChat(Integer requser, Integer UserId) throws UserException;
+	
+	public Chat findChatById(Integer chatId) throws ChatException;
+
+	public List<Chat> findAllChatByUserId(Integer userId) throws UserException;
+
+	public Chat createGroup(GroupChatRequest req, Integer reqUserId) throws UserException, ChatException;
+
+	public Chat addUserToGroup(Integer userId, Integer chatId) throws UserException, ChatException;
+
+	public Chat renameGroup(Integer chatId, String groupName, Integer reqUserId) throws ChatException, UserException;
+
+	public Chat removeFromGroup(Integer chatId, Integer userId, Integer reqUser) throws UserException, ChatException;
+
+	public Chat deleteChat(Integer chatId, Integer userId) throws ChatException, UserException;
+}

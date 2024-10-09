@@ -1,0 +1,14 @@
+package com.corejavahub.repository;
+
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import com.corejavahub.exception.UserException;
+import com.corejavahub.model.Chat;
+
+
+public interface ChatRepository extends JpaRepository<Chat, Integer> {
+
+	public Chat createChat(Integer requser, Integer UserId) throws UserException;
+	
+	
+}

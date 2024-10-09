@@ -1,0 +1,76 @@
+package com.corejavahub.service;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.corejavahub.exception.ChatException;
+import com.corejavahub.exception.UserException;
+import com.corejavahub.model.Chat;
+import com.corejavahub.model.User;
+import com.corejavahub.repository.ChatRepository;
+
+@Service
+public class ChatServiceimplementation implements ChatService{
+
+	@Autowired
+	private ChatRepository chatRepository;
+	@Autowired
+	private UserService userService;
+	
+	@Override
+	public Chat createChat(User reqUser, Integer userId) throws UserException {
+
+
+		User user=userService.findUserById(userId);
+		
+		Chat isChatExist=chatRepository.
+		return null;
+	}
+
+	@Override
+	public Chat findChatById(Integer chatId) throws ChatException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Chat> findAllChatByUserId(Integer userId) throws UserException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Chat createGroup(GroupChatRequest req, Integer reqUserId) throws UserException, ChatException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Chat addUserToGroup(Integer userId, Integer chatId) throws UserException, ChatException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Chat renameGroup(Integer chatId, String groupName, Integer reqUserId) throws ChatException, UserException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Chat removeFromGroup(Integer chatId, Integer userId, Integer reqUser) throws UserException, ChatException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Chat deleteChat(Integer chatId, Integer userId) throws ChatException, UserException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	
+
+}

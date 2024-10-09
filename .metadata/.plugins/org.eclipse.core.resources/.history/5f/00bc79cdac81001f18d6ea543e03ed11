@@ -1,0 +1,8 @@
+package com.corejavahub.repository;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import com.corejavahub.model.Chat;
+
+public interface ChatRepository extends JpaRepository<Chat, Integer> {
+
+}

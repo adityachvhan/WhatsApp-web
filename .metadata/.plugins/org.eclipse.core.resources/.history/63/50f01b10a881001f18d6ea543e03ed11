@@ -1,0 +1,18 @@
+package com.corejavahub.model;
+
+import jakarta.persistence.Column;
+
+public class Chat {
+
+	private Integer id;
+
+	private String chat_name;
+
+	private String chat_image;
+
+	@Column(name = "is_group")
+	private boolean isGroup;
+
+	@Column(name = "created_by")
+	private User createdBy;
+}

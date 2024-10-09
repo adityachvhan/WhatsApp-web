@@ -1,0 +1,5 @@
+package com.corejavahub.exception;
+
+public class ChatException extends Exception {
+
+}

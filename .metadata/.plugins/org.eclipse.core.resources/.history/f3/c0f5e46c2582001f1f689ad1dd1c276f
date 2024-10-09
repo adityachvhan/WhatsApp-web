@@ -1,0 +1,5 @@
+  package com.corejavahub.request;
+
+public class GroupChatRequest {
+
+}

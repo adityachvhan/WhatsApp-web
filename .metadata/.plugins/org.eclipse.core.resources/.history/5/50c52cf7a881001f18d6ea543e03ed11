@@ -1,0 +1,5 @@
+package com.corejavahub.repository;
+
+public interface ChatRepository {
+
+}

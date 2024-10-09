@@ -1,0 +1,19 @@
+package com.corejavahub.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.corejavahub.service.ChatService;
+import com.corejavahub.service.UserService;
+
+@RestController
+@RequestMapping("/api/chats")
+public class ChatController {
+
+	@Autowired
+	private ChatService chatService ;
+	
+	@Autowired
+	private UserService userService;
+}
