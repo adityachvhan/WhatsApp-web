@@ -4,20 +4,44 @@ import { BiCommentDetail } from "react-icons/bi";
 import { AiOutlineSearch } from "react-icons/ai";
 import { BsFilter } from "react-icons/bs";
 import ChatCard from './ChatCard/ChatCard';
-
+import { BsThreeDotsVertical } from "react-icons/bs";
+import MessageCard from './MessageCard/MessageCard';
+import { BsEmojiSmile } from "react-icons/bs";
+import { ImAttachment } from "react-icons/im"
+import { BsMicFill } from "react-icons/bs";
+import { useNavigate } from 'react-router-dom'
+import Profile from './Profile/Profile';
 
 const HomePage = () => {
 
     const [querys, setQuerys] = useState(null)
     const [currentChat, setCurrentChat] = useState(null)
+    const [content, setContent] = useState("")
+    const [isProfile, setIsprofile] = useState(false)
+
+    const navigate = useNavigate();
 
     const handleSearched = () => {
 
     }
 
-
     const handleClickOnChatCard = () => {
         setCurrentChat(true)
+    }
+
+    const handleCreateNewMessage = () => {
+
+    }
+
+    const handleNevigate = () => {
+
+        // navigate("/profile")
+
+        setIsprofile(true)
+    }
+
+    const handleCloseOpenProfile = () => {
+        setIsprofile(false)
     }
 
     return (
@@ -27,22 +51,26 @@ const HomePage = () => {
             <div className='py-14 bg-[#00a884] w-full'></div>
 
             {/* Main Content */}
-            <div className='flex h-[94vh] pt-14 bg-[#f0f2f5] absolute top-6 left-6 w-full'>
+            <div className='flex h-[94vh]  bg-[#f0f2f5] absolute top-6 left-6 w-[96vw] left-[2vw]'>
 
                 {/* Left Pane */}
                 <div className='left w-[30%] bg-[#e8e9ea] h-full'>
 
-                    <div className='w-full'>
+                    {/* profile */}
+                    {isProfile && <Profile handleCloseOpneProfile={handleCloseOpenProfile} />}
+
+                    {!isProfile && <div className='w-full'>
+                        {/* Home Page */}
                         <div className='flex justify-between items-center p-3'>
                             <div className='flex items-center space-x-3'>
-                                <img className='rounded-full w-10 h-10'
+                                <img onClick={handleNevigate} className='rounded-full w-10 h-10'
                                     src='https://cdn.pixabay.com/photo/2018/01/22/07/31/portrait-3098319_640.jpg' />
 
                                 <p>UserName</p>
                             </div>
 
                             <div className='flex space-x-3 text-2xl'>
-                                <TbCircleDashed />
+                                <TbCircleDashed className='cursor-pointer' onClick={() => navigate("/status")} />
                                 <BiCommentDetail />
                             </div>
                         </div>
@@ -66,8 +94,7 @@ const HomePage = () => {
 
                         </div>
 
-
-                        <div className='bg-white overflow-y-scroll h-[76.8vh] px-3'>
+                        <div className='bg-white overflow-y-scroll scrollbar-hide h-[75vh] px-5'>
 
                             {
                                 querys && [1, 1, 1, 1, 1, 1].map((user) => <div onClick={handleClickOnChatCard}> {""}<hr /> <ChatCard />{""}</div>)
@@ -75,7 +102,9 @@ const HomePage = () => {
 
                         </div>
 
-                    </div>
+                    </div>}
+
+
                 </div>
 
                 {/* Right Pane */}
@@ -95,7 +124,70 @@ const HomePage = () => {
                     </div>
                 </div>}
 
+                {/* message part  start*/}
 
+                {
+                    currentChat && <div className='w-[70%] relative'>
+
+                        <div className='relative top-0 w-full bg-[#f0f2f5]'>
+                            <div className='flex justify-between'>
+                                <div className='py-3 space-x-4 flex items-center px-3'>
+                                    <img className='rounded-full w-10 h-10' src='https://cdn.pixabay.com/photo/2022/01/23/08/27/fashion-model-6960097_640.jpg' />
+                                    <p>UserName</p>
+                                </div>
+
+                                <div className='py-3 space-x-4 items-center px-3 flex'>
+                                    <AiOutlineSearch />
+                                    <BsThreeDotsVertical />
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* message part ends*/}
+
+                        {/* message section start*/}
+
+                        <div className='px-10 h-[85vh] overflow-y-scroll scrollbar-hide'>
+                            <div className='space-y-1 flex flex-col justify-center mt-20 py-2'>
+                                {
+                                    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1].map((item, index) => <MessageCard isReqUserMessage={index % 2 == 0} content={"message from server"} />)
+                                }
+                            </div>
+                        </div>
+
+                        {/* message section ends*/}
+
+
+                        {/* Footer part start */}
+
+                        <div className='footer bg-[#f0f2f5] absolute bottom-0 py-3 text-2xl w-full'>
+                            <div className='flex justify-between items-center px-5 relative'>
+
+                                <BsEmojiSmile className='cursor-pointer' />
+                                <ImAttachment className='cursor-pointer' />
+
+                                <input
+                                    type='text'
+                                    onChange={(event) => setContent(event.target.value)}
+                                    className='py-2 outline-none border-none w-[85%] bg-white pl-4 rounded-md'
+                                    placeholder='Type a message'
+                                    onKeyPress={(event) => {
+                                        if (event.key === "Enter") {
+                                            handleCreateNewMessage();
+                                            setContent("");
+                                        }
+                                    }}
+                                />
+
+                                <BsMicFill className='cursor-pointer' />
+                            </div>
+                        </div>
+
+                        {/* Footer part ends */}
+
+
+                    </div>
+                }
             </div>
         </div>
     );
