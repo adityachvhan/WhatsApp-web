@@ -12,12 +12,28 @@ import { BsMicFill } from "react-icons/bs";
 import { useNavigate } from 'react-router-dom'
 import Profile from './Profile/Profile';
 
+import Button from '@mui/material/Button';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import CreateGroup from './Group/CreateGroup';
+
+
 const HomePage = () => {
 
     const [querys, setQuerys] = useState(null)
     const [currentChat, setCurrentChat] = useState(null)
     const [content, setContent] = useState("")
     const [isProfile, setIsprofile] = useState(false)
+    const [anchorEl, setAnchorEl] = useState(null);
+    const [isGroup, setIsGroup] = useState(false)
+
+    const open = Boolean(anchorEl);
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
 
     const navigate = useNavigate();
 
@@ -44,6 +60,10 @@ const HomePage = () => {
         setIsprofile(false)
     }
 
+    const handleCreateGroup = () => {
+        setIsGroup(true)
+    }
+
     return (
         <div className='relative'>
 
@@ -57,9 +77,10 @@ const HomePage = () => {
                 <div className='left w-[30%] bg-[#e8e9ea] h-full'>
 
                     {/* profile */}
+                    {isGroup && <CreateGroup />}
                     {isProfile && <Profile handleCloseOpneProfile={handleCloseOpenProfile} />}
 
-                    {!isProfile && <div className='w-full'>
+                    {!isProfile && !isGroup && <div className='w-full'>
                         {/* Home Page */}
                         <div className='flex justify-between items-center p-3'>
                             <div className='flex items-center space-x-3'>
@@ -71,7 +92,30 @@ const HomePage = () => {
 
                             <div className='flex space-x-3 text-2xl'>
                                 <TbCircleDashed className='cursor-pointer' onClick={() => navigate("/status")} />
-                                <BiCommentDetail />
+                                <BiCommentDetail className='cursor-pointer' />
+                                <div>
+                                    <BsThreeDotsVertical
+                                        id="basic-button"
+                                        aria-controls={open ? 'basic-menu' : undefined}
+                                        aria-haspopup="true"
+                                        aria-expanded={open ? 'true' : undefined}
+                                        onClick={handleClick}
+                                        className='cursor-pointer'
+                                    />
+                                    <Menu
+                                        id="basic-menu"
+                                        anchorEl={anchorEl}
+                                        open={open}
+                                        onClose={handleClose}
+                                        MenuListProps={{
+                                            'aria-labelledby': 'basic-button',
+                                        }}
+                                    >
+                                        <MenuItem onClick={handleClose}>Profile</MenuItem>
+                                        <MenuItem onClick={handleCreateGroup}>Create Group</MenuItem>
+                                        <MenuItem onClick={handleClose}>Logout</MenuItem>
+                                    </Menu>
+                                </div>
                             </div>
                         </div>
 
