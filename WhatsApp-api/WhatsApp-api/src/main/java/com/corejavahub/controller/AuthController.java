@@ -42,43 +42,41 @@ public class AuthController {
 	@PostMapping("/signup")
 	public ResponseEntity<AuthResponse> createUserHandler(@RequestBody User user) throws UserException {
 
-		String email = user.getEmail();
-		String full_name = user.getFull_name();
-		String passsword = user.getPasswrod();
+		String email = user.getEmail(); // Get email from the User object
+		String full_name = user.getFull_name(); // Get full_name from the User object
+		String password = user.getPassword(); // Get password from the User object
 
 		User isUser = userRepository.findByEmail(email);
 
 		if (isUser != null) {
-
-			throw new UserException("Email is used with another account..");
+			throw new UserException("Email is used with another account.");
 		}
 
 		User createdUser = new User();
-
 		createdUser.setEmail(email);
 		createdUser.setFull_name(full_name);
-		createdUser.setPasswrod(passwordEncoder.encode(passsword));
+		createdUser.setPassword(passwordEncoder.encode(password)); // Correctly set the password
 
 		userRepository.save(createdUser);
 
-		Authentication authentication = new UsernamePasswordAuthenticationToken(email, passsword);
+		Authentication authentication = new UsernamePasswordAuthenticationToken(email, password);
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 
 		String jwt = jwtProvider.generateToken(authentication);
 
 		AuthResponse response = new AuthResponse(jwt, true);
-
-		return new ResponseEntity<AuthResponse>(response, HttpStatus.ACCEPTED);
+		return new ResponseEntity<>(response, HttpStatus.ACCEPTED);
 	}
 
+	@PostMapping("/signin")
 	public ResponseEntity<AuthResponse> loginHandler(@RequestBody LoginRequest req) {
 
 		String email = req.getEmail();
 		String passsword = req.getPassword();
-		
+
 		Authentication authentication = authentication(email, passsword);
 		SecurityContextHolder.getContext().setAuthentication(authentication);
-		
+
 		String jwt = jwtProvider.generateToken(authentication);
 
 		AuthResponse response = new AuthResponse(jwt, true);

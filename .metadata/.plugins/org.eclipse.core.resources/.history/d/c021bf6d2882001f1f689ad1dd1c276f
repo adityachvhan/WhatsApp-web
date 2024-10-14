@@ -1,5 +1,0 @@
-package com.corejavahub.repository;
-
-public interface MessageRepository {
-
-}

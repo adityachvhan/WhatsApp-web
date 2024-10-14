@@ -1,5 +1,0 @@
-package com.corejavahub.request;
-
-public class SingleChatRequest {
-
-}

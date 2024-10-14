@@ -1,8 +1,0 @@
-package com.corejavahub.service;
-
-import com.corejavahub.model.Chat;
-
-public interface ChatService {
-
-	public Chat createChat(Integer reqUser,Integer userId);
-}

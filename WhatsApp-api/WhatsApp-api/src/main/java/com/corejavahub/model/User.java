@@ -10,15 +10,16 @@ import lombok.Data;
 @Data
 public class User {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
-	private String full_name;
+    private String full_name;
 
-	private String email;
+    private String email;
 
-	private String profile_picture;
+    private String profile_picture;
 
-	private String passwrod;
+    // Correct the typo here
+    private String password;  // Change 'passwrod' to 'password'
 }

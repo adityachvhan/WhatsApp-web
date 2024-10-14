@@ -7,11 +7,10 @@ import org.springframework.data.jpa.repository.Query;
 
 import com.corejavahub.model.User;
 
-
 public interface UserRepository extends JpaRepository<User, Integer> {
 
-public User findByEmail(String email);
-	
+	public User findByEmail(String email);
+
 	@Query("select u from User u where u.full_name Like %:query%  or u.email Like %:query%")
 	public List<User> searchUser(String query);
 }
