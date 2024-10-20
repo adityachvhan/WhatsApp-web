@@ -45,7 +45,6 @@ public class ChatController {
 		Chat chat = chatService.createChat(reqUser, singleChatRequest.getUserId());
 
 		return new ResponseEntity<Chat>(chat, HttpStatus.OK);
-
 	}
 
 	@PostMapping("/group")

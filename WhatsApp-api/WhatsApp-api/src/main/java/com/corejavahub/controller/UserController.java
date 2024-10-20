@@ -1,5 +1,6 @@
 package com.corejavahub.controller;
 
+import java.util.HashSet;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.corejavahub.exception.UserException;
@@ -27,7 +29,7 @@ public class UserController {
 	private UserService userService;
 
 	@GetMapping("/profile")
-	public ResponseEntity<User> getuserProfilehandler(@RequestHeader("Authorization") String token)
+	public ResponseEntity<User> getUserProfileHandler(@RequestHeader("Authorization") String token)
 			throws UserException {
 
 		User user = userService.findUserProfile(token);
@@ -51,9 +53,21 @@ public class UserController {
 
 		userService.updateUser(user.getId(), req);
 
-		ApiResponse apiResponse = new ApiResponse("User data updated Successfully", true);
+		ApiResponse apiResponse = new ApiResponse("User updated Successfully", true);
 
-		return new ResponseEntity<ApiResponse>(apiResponse,HttpStatus.ACCEPTED);
+		return new ResponseEntity<ApiResponse>(apiResponse, HttpStatus.ACCEPTED);
 	}
+
+	 @GetMapping("/search")
+	    public ResponseEntity<HashSet<User>> searchUsersByName(@RequestParam("name") String name) {
+	        // Search users using the service layer
+	        List<User> users = userService.searchuser(name);
+
+	        // Convert the list to a set to ensure uniqueness
+	        HashSet<User> userSet = new HashSet<>(users);
+
+	        // Return the response entity with the set and ACCEPTED status
+	        return new ResponseEntity<>(userSet, HttpStatus.ACCEPTED);
+	    }
 
 }

@@ -18,8 +18,14 @@ const SignIn = () => {
     const { auth } = useSelector(store => store);
     const token = localStorage.getItem('token');
 
+    // Logging inputData for debugging
+    useEffect(() => {
+        console.log("Current inputData:", inputData);
+    }, [inputData]);
+
     const handleSubmit = (event) => {
         event.preventDefault();
+        console.log("Handle Submit");
 
         // Basic validation before submitting the form
         if (inputData.email === "" || inputData.password === "") {
@@ -28,6 +34,9 @@ const SignIn = () => {
             setOpenSnackbar(true);
             return;
         }
+
+        // Log the input data before dispatching the action
+        console.log("Submitting with inputData:", inputData);
 
         // Show success snackbar when form is submitted
         setOpenSnackbar(true);
@@ -49,25 +58,14 @@ const SignIn = () => {
     };
 
     useEffect(() => {
-        if (token) {
-            dispatch(currentUser(token));
-        }
-    }, [token, dispatch]);
+        if (token) dispatch(currentUser(token))
+    }, [token])
 
     useEffect(() => {
         if (auth.reqUser?.full_name) {
-            setSnackbarSeverity("success");
-            setSnackbarMessage(`Welcome, ${auth.reqUser.full_name}!`);
-            setOpenSnackbar(true);
-            navigate("/");
+            navigate("/")
         }
-
-        if (auth.error) {
-            setSnackbarSeverity("error");
-            setSnackbarMessage("Login failed. Please check your credentials.");
-            setOpenSnackbar(true);
-        }
-    }, [auth.reqUser, auth.error, navigate]);
+    }, [auth.reqUser])
 
     return (
         <div>
@@ -116,11 +114,11 @@ const SignIn = () => {
                 onClose={handleSnackBarClose}>
                 <Alert
                     onClose={handleSnackBarClose}
-                    severity={snackbarSeverity}  // Dynamically set the severity
+                    severity={snackbarSeverity}
                     variant="filled"
                     sx={{ width: '100%' }}
                 >
-                    {snackbarMessage}  // Dynamic message based on the situation
+                    {snackbarMessage}
                 </Alert>
             </Snackbar>
         </div>

@@ -1,0 +1,19 @@
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+@Entity
+@Data
+public class User {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+
+    private String email;
+
+    @JsonProperty("full_name") // This will map the JSON field to the Java field
+    private String full_name;
+
+    private String profile_picture;
+
+    private String password;
+}

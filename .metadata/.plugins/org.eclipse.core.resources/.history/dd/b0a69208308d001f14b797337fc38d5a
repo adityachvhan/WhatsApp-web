@@ -1,0 +1,29 @@
+package com.corejavahub.model;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import lombok.Data;
+
+@Entity
+@Data
+public class User {
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer id;
+
+	private String email;
+
+	// This will map the JSON field to the Java field
+	@JsonProperty("full_name") 
+    private String full_name;
+
+
+	private String profile_picture;
+
+	private String password;
+}

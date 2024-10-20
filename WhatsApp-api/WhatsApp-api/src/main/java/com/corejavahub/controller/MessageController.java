@@ -46,7 +46,7 @@ public class MessageController {
 		return new ResponseEntity<Message>(message, HttpStatus.OK);
 	}
 
-	@GetMapping("/chat/{chatId}")
+	@GetMapping("/chat/{chatId}") 
 	public ResponseEntity<List<Message>> getChatMessageHandler(@PathVariable Integer chatId,
 			@RequestHeader("Authorization") String jwt) throws UserException, ChatException {
 

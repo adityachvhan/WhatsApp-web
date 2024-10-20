@@ -9,6 +9,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -40,16 +41,31 @@ public class AuthController {
 	private CustomUserServiceImplementation customUserServiceImplementation;
 
 	@PostMapping("/signup")
-	public ResponseEntity<AuthResponse> createUserHandler(@RequestBody User user) throws UserException {
+	public ResponseEntity<AuthResponse> createUserHandler(@org.springframework.web.bind.annotation.RequestBody User user) throws UserException {
 
-		String email = user.getEmail(); // Get email from the User object
+		System.out.println("Received signup request: email=" + user.getEmail() + ", full_name=" + user.getFull_name()
+				+ ", password=" + user.getPassword());
+
+		String email=user.getEmail(); // Get email from the User object
 		String full_name = user.getFull_name(); // Get full_name from the User object
 		String password = user.getPassword(); // Get password from the User object
+
+		if (email == null || email.isEmpty()) {
+			throw new UserException("Email cannot be null or empty.");
+		}
+
+		if (full_name == null || full_name.isEmpty()) {
+			throw new UserException("Full name cannot be null or empty.");
+		}
+
+		if (password == null || password.isEmpty()) {
+			throw new UserException("Password cannot be null or empty.");
+		}
 
 		User isUser = userRepository.findByEmail(email);
 
 		if (isUser != null) {
-			throw new UserException("Email is used with another account.");
+			throw new UserException("The email address is already associated with another account.");
 		}
 
 		User createdUser = new User();
@@ -65,16 +81,17 @@ public class AuthController {
 		String jwt = jwtProvider.generateToken(authentication);
 
 		AuthResponse response = new AuthResponse(jwt, true);
-		return new ResponseEntity<>(response, HttpStatus.ACCEPTED);
+
+		return new ResponseEntity<AuthResponse>(response, HttpStatus.CREATED);
 	}
 
 	@PostMapping("/signin")
-	public ResponseEntity<AuthResponse> loginHandler(@RequestBody LoginRequest req) {
+	public ResponseEntity<AuthResponse> loginHandler(@org.springframework.web.bind.annotation.RequestBody LoginRequest req) {
 
 		String email = req.getEmail();
-		String passsword = req.getPassword();
+		String password = req.getPassword();
 
-		Authentication authentication = authentication(email, passsword);
+		Authentication authentication = authentication(email, password);
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 
 		String jwt = jwtProvider.generateToken(authentication);
@@ -96,7 +113,7 @@ public class AuthController {
 
 		if (!passwordEncoder.matches(password, userDetails.getPassword())) {
 
-			throw new BadCredentialsException("InValid password or Username");
+			throw new BadCredentialsException("Invalid username or password.");
 		}
 
 		return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());

@@ -6,19 +6,22 @@ export const register = (data) => async (dispatch) => {
         const response = await fetch(`${BASE_API_URL}/auth/signup`, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
             },
-            body: JSON.stringify(data)
+            body: JSON.stringify(data),
         });
 
         const resData = await response.json();
         if (resData.jwt) localStorage.setItem("token", resData.jwt)
         console.log("register", resData);
         dispatch({ type: REGISTER, payload: resData });
+
     } catch (error) {
-        console.error("Error during registration:", error);
+        console.error('Error during registration:', error);
+        throw error; // Throw the error to be caught in the .catch() block of the component
     }
 };
+
 
 export const login = (data) => async (dispatch) => {
     try {
@@ -31,6 +34,7 @@ export const login = (data) => async (dispatch) => {
         });
 
         const resData = await response.json();
+        if (resData.jwt) localStorage.setItem("token", resData.jwt)
         console.log("login", resData);
         dispatch({ type: LOGIN, payload: resData });
     } catch (error) {
@@ -43,7 +47,7 @@ export const currentUser = (token) => async (dispatch) => {
         const response = await fetch(`${BASE_API_URL}/api/users/profile`, {
             method: 'GET',
             headers: {
-                'Content-Type': 'application/json',  // Fixed typo in 'application/json'
+                'Content-Type': 'application/json',
                 Authorization: `Bearer ${token}`
             },
         });
@@ -61,12 +65,12 @@ export const searchUser = (data) => async (dispatch) => {
         const response = await fetch(`${BASE_API_URL}/api/users/search?name=${data.keyword}`, {
             method: 'GET',
             headers: {
-                'Content-Type': 'application/json',  // Fixed typo in 'application/json'
+                'Content-Type': 'application/json', 
                 Authorization: `Bearer ${data.token}`
             },
         });
 
-        const resData = await response.json();  // Corrected json() method
+        const resData = await response.json(); 
         console.log("searchUser", resData);
         dispatch({ type: SEARCH_USER, payload: resData });
     } catch (error) {

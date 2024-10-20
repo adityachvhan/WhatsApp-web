@@ -31,7 +31,7 @@ public class UserServiceImplementation implements UserService {
 
 			return optional.get();
 		}
-		throw new UserException("No User Found With this Id " + id);
+		throw new UserException("No User Found With Id " + id);
 	}
 
 	@Override
@@ -39,10 +39,11 @@ public class UserServiceImplementation implements UserService {
 
 		String email = jwtProvider.getEmailFromJwtToken(jwt);
 
-		if (email != null) {
+		if (email == null) {
 
 			throw new BadCredentialsException("Invalid Token...");
 		}
+		
 		User user = userRepository.findByEmail(email);
 
 		if (user == null) {
@@ -51,6 +52,8 @@ public class UserServiceImplementation implements UserService {
 		}
 		return user;
 	}
+	
+	
 
 	@Override
 	public User updateUser(Integer userId, UpdateUserRequest req) throws UserException {
@@ -69,6 +72,9 @@ public class UserServiceImplementation implements UserService {
 
 		return userRepository.save(user);
 	}
+	
+	
+	 
 
 	@Override
 	public List<User> searchuser(String query) {

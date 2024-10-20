@@ -2,7 +2,8 @@ import { LOGIN, REGISTER, REQ_USER, SEARCH_USER, UPDATE_USER } from "./ActionTyp
 
 const initialValue = {
     singup: null,
-    singin: null
+    singin: null,
+    reqUser: null
 }
 
 export const authReducer = (store = initialValue, { type, payload }) => {
@@ -22,6 +23,5 @@ export const authReducer = (store = initialValue, { type, payload }) => {
     else if (type === UPDATE_USER) {
         return { ...store, updatedUser: payload }
     }
-
     return store;
 }

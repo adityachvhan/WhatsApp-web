@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
@@ -29,8 +30,7 @@ public class GlobalException {
 
 		return new ResponseEntity<ErrorDetail>(errorDetail, HttpStatus.BAD_REQUEST);
 	}
-	
-	
+
 	@ExceptionHandler(ChatException.class)
 	public ResponseEntity<ErrorDetail> ChatExceptionHandler(ChatException chatException, WebRequest req) {
 
@@ -39,8 +39,6 @@ public class GlobalException {
 
 		return new ResponseEntity<ErrorDetail>(errorDetail, HttpStatus.BAD_REQUEST);
 	}
-	
-	
 
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	public ResponseEntity<ErrorDetail> MethodArgumentNotValidExceptionHandler(
@@ -53,7 +51,7 @@ public class GlobalException {
 		return new ResponseEntity<ErrorDetail>(errorDetail, HttpStatus.BAD_REQUEST);
 	}
 
-	@ExceptionHandler(NoHandlerFoundException	.class)
+	@ExceptionHandler(NoHandlerFoundException.class)
 	public ResponseEntity<ErrorDetail> handleNoHandlerFoundExecption(NoHandlerFoundException noHandlerFoundException,
 			WebRequest req) {
 
@@ -62,6 +60,8 @@ public class GlobalException {
 
 		return new ResponseEntity<ErrorDetail>(errorDetail, HttpStatus.NOT_FOUND);
 	}
+
+//	note -- otherExceptionHandler should be last in the class because this extends Exception Class 
 
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<ErrorDetail> otherExceptionHandler(Exception e, WebRequest req) {
