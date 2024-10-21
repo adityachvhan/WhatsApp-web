@@ -37,8 +37,10 @@ public class ChatController {
 	private UserService userService;
 
 	@PostMapping("/single")
-	public ResponseEntity<Chat> createChatHandler(@RequestBody SingleChatRequest singleChatRequest,
+	public ResponseEntity<Chat> createChatHandler(@org.springframework.web.bind.annotation.RequestBody SingleChatRequest singleChatRequest,
 			@RequestHeader("Authorization") String jwt) throws UserException {
+
+		System.out.println("Received userId: " + singleChatRequest.getUserId());
 
 		User reqUser = userService.findUserProfile(jwt);
 
@@ -48,7 +50,7 @@ public class ChatController {
 	}
 
 	@PostMapping("/group")
-	public ResponseEntity<Chat> createGroupHandler(@RequestBody GroupChatRequest req,
+	public ResponseEntity<Chat> createGroupHandler(@org.springframework.web.bind.annotation.RequestBody GroupChatRequest req,
 			@RequestHeader("Authorization") String jwt) throws UserException, ChatException {
 
 		User reqUser = userService.findUserProfile(jwt);
@@ -73,11 +75,19 @@ public class ChatController {
 	public ResponseEntity<List<Chat>> findAllChatByUserIdHandler(@RequestHeader("Authorization") String jwt)
 			throws UserException {
 
-		User reqUser = userService.findUserProfile(jwt);
+		// Extract user profile from the token
+	    User reqUser = userService.findUserProfile(jwt);
+	    
+	    if (reqUser == null) {
+	        throw new UserException("User not found for the provided JWT");
+	    }
 
-		List<Chat> chats = chatService.findAllChatByUserId(reqUser.getId());
+	    System.out.println("User ID retrieved: " + reqUser.getId());
 
-		return new ResponseEntity<List<Chat>>(chats, HttpStatus.OK);
+	    // Fetch chats by user ID
+	    List<Chat> chats = chatService.findAllChatByUserId(reqUser.getId());
+
+	    return new ResponseEntity<>(chats, HttpStatus.OK);
 
 	}
 

@@ -2,11 +2,15 @@ import React, { useState } from 'react'
 import { BsArrowLeft, BsCheck2 } from "react-icons/bs";
 import { BsPencil } from "react-icons/bs";
 import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux'
 
 const Profile = ({ handleCloseOpneProfile }) => {
 
     const [flag, setFlag] = useState(false)
     const [username, setUsername] = useState(null)
+    const [tempPicture, setTempPicture] = useState(null)
+    const { auth } = useSelector(store => store)
+    const dispatch = useDispatch()
 
     const handleFlag = () => {
 
@@ -21,6 +25,14 @@ const Profile = ({ handleCloseOpneProfile }) => {
     const handleChange = (event) => {
 
         setUsername(event.target.value)
+    }
+
+    const uploadOnCloudinary = () => {
+        
+        // const data = new FormData();
+        // data.append("file",pics)
+        // data.append("upload_preset","whatsapp")
+
     }
 
     return (

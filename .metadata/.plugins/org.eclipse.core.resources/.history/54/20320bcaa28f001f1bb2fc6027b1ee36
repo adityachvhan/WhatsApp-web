@@ -1,0 +1,22 @@
+package com.corejavahub.repository;
+
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+
+import com.corejavahub.model.Chat;
+import com.corejavahub.model.User;
+
+// time of video == 2:50:16 
+public interface ChatRepository extends JpaRepository<Chat, Integer> {
+
+	@Query("select c from Chat c join c.users  u where u.id=:userId")
+	public List<Chat> findChatByUserId(@Param("userId")Integer userId);
+
+	 // Find the first single (non-group) chat between two users
+    @Query("select c from Chat c where c.isGroup=false AND :user member of c.users And :reqUser member of c.users")
+    public Optional<Chat> findFirstSingleChatByUserIds(@Param("user") User user, @Param("reqUser") User reqUser);
+}

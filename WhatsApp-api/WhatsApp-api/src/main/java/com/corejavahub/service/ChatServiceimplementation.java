@@ -33,8 +33,8 @@ public class ChatServiceimplementation implements ChatService {
 		}
 
 		Chat chat = new Chat();
-		chat.setCreatedBy(reqUser);
-		chat.getUsers().add(user);
+		chat.setCreatedBy(reqUser);  // Ensure reqUser has a valid ID
+		chat.getUsers().add(user);   // Ensure user has a valid ID
 		chat.getUsers().add(reqUser);
 
 		chat.setGroup(false);

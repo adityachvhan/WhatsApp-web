@@ -17,7 +17,7 @@ import CreateGroup from './Group/CreateGroup';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { currentUser, LogoutAction, searchUser } from '../Redux/Auth/Action';
-import { createChat } from '../Redux/Chat/Action';
+import { createChat, getUsersChat } from '../Redux/Chat/Action';
 
 const HomePage = () => {
     const [querys, setQuerys] = useState("");  // Changed from null to an empty string
@@ -27,7 +27,7 @@ const HomePage = () => {
     const [anchorEl, setAnchorEl] = useState(null);
     const [isGroup, setIsGroup] = useState(false);
 
-    const { auth } = useSelector(store => store);
+    const { auth, chat, message } = useSelector(store => store);
     const dispatch = useDispatch();
     const open = Boolean(anchorEl);
     const token = localStorage.getItem("token");
@@ -44,17 +44,21 @@ const HomePage = () => {
     };
 
     const handleSearch = (keyword) => {
-
         dispatch(searchUser({ keyword, token }))
     };
 
     const handleCreateNewMessage = () => {
-        // Implement message creation logic
+
     };
 
+    useEffect(() => {
+        dispatch(getUsersChat({ token }))
+    }, [chat.createdChat, chat.CreatedGroup])
+
     const handleClickOnChatCard = (userId) => {
-        // console.log("Clicked userId: ", userId);
+        console.log("Clicked userId: ", userId);  // Debug log
         dispatch(createChat({ token, data: { userId } }));
+        setQuerys("")
     };
 
     const handleNavigate = () => {
@@ -84,6 +88,12 @@ const HomePage = () => {
             navigate("/signup")
         }
     }, [auth.reqUser])
+
+
+    const handleCurrentChat = (item) => {
+        setCurrentChat(item)
+    }
+    console.log("current chat", currentChat);
 
     return (
         <div className='relative'>
@@ -162,13 +172,44 @@ const HomePage = () => {
 
                             {/* Chat List */}
                             <div className='bg-white overflow-y-scroll scrollbar-hide h-[75vh] px-5'>
-                                {querys &&
-                                    auth.searchUser?.map((item) => (
-                                        <div key={item.id} onClick={() => handleClickOnChatCard(item.id)}>
-                                            <hr />
-                                            <ChatCard item={item} />
-                                        </div>
-                                    ))}
+                                {querys && auth.searchUser?.map((item) => (
+                                    <div key={item.id} onClick={() => handleClickOnChatCard(item.id)}>
+                                        <hr />
+                                        <ChatCard
+                                            name={item.full_name}
+                                            userImage={
+                                                item.profile_picture || "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png"
+                                            }
+                                        />
+                                    </div>
+                                ))}
+
+                                {chat.chats.length > 0 && !querys && chat.chats?.map((item) => (
+                                    <div key={item.id} onClick={(item) => handleCurrentChat(item)}> {/* Corrected here */}
+                                        <hr />
+                                        {item.is_group ? (
+                                            <ChatCard
+                                                name={item.full_name}
+                                                userImage={
+                                                    item.profile_picture || "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png"
+                                                }
+                                            />
+                                        ) : (
+                                            <ChatCard
+                                                isChat={true}
+                                                name={auth.reqUser?.id !== item.users[0]?.id
+                                                    ? item.users[0].full_name
+                                                    : item.users[1].full_name
+                                                }
+                                                userImage={
+                                                    auth.reqUser.id !== item.users[0]?.id
+                                                        ? item.users[0].profile_picture || "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png"
+                                                        : item.users[1].profile_picture || "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png"
+                                                }
+                                            />
+                                        )}
+                                    </div>
+                                ))}
                             </div>
                         </div>
                     )}

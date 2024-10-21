@@ -16,17 +16,18 @@ export const createChat = (chatData) => async (dispatch) => {
             body: JSON.stringify(chatData.data)
         })
 
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+
         const data = await response.json();
         console.log("createChat", data);
         dispatch({ type: CREATE_CHAT, payload: data })
 
     } catch (error) {
-
         console.log(error);
-
     }
 }
-
 
 export const createGroupChat = (chatData) => async (dispatch) => {
 
@@ -61,7 +62,7 @@ export const getUsersChat = (chatData) => async (dispatch) => {
 
         })
         const data = await response.json();
-        console.log("createChat", data);
+        console.log("users chat", data);
         dispatch({ type: GET_USERS_CHAT, payload: data })
 
     } catch (error) {

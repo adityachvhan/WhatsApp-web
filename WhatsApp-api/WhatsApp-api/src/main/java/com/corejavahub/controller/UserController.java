@@ -58,16 +58,16 @@ public class UserController {
 		return new ResponseEntity<ApiResponse>(apiResponse, HttpStatus.ACCEPTED);
 	}
 
-	 @GetMapping("/search")
-	    public ResponseEntity<HashSet<User>> searchUsersByName(@RequestParam("name") String name) {
-	        // Search users using the service layer
-	        List<User> users = userService.searchuser(name);
+	@GetMapping("/search")
+	public ResponseEntity<HashSet<User>> searchUsersByName(@RequestParam("name") String name) {
+	    // Search users using the service layer
+	    List<User> users = userService.searchuser(name);
 
-	        // Convert the list to a set to ensure uniqueness
-	        HashSet<User> userSet = new HashSet<>(users);
+	    // Convert List to HashSet to ensure uniqueness
+	    HashSet<User> uniqueUsers = new HashSet<>(users);
 
-	        // Return the response entity with the set and ACCEPTED status
-	        return new ResponseEntity<>(userSet, HttpStatus.ACCEPTED);
-	    }
+	    // Return the response entity with the set and OK status
+	    return new ResponseEntity<>(uniqueUsers, HttpStatus.OK);
+	}
 
 }

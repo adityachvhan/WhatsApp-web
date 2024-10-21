@@ -81,12 +81,12 @@ export const searchUser = (data) => async (dispatch) => {
 export const updateUser = (data) => async (dispatch) => {
     try {
         const response = await fetch(`${BASE_API_URL}/api/users/update/${data.id}`, {
-            method: 'POST',  // Assuming this should be 'POST', not 'GET' for updating
+            method: 'POST',  
             headers: {
-                'Content-Type': 'application/json',  // Fixed typo in 'application/json'
+                'Content-Type': 'application/json', 
                 Authorization: `Bearer ${data.token}`
             },
-            body: JSON.stringify(data)  // You probably want to send user data in the body
+            body: JSON.stringify(data)
         });
 
         const resData = await response.json();  // Corrected json() method

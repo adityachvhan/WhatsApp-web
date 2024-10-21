@@ -1,6 +1,5 @@
 package com.corejavahub.model;
 
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -12,6 +11,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
@@ -28,9 +28,10 @@ public class Chat {
 	private String chat_name;
 
 	private String chat_image;
-	
+
 	@ManyToMany
-	private Set<User> admins=new HashSet<>();
+	@JoinTable(name = "chat_admins", joinColumns = @JoinColumn(name = "chat_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
+	private Set<User> admins = new HashSet<>();
 
 	@Column(name = "is_group")
 	private boolean isGroup;
@@ -38,12 +39,11 @@ public class Chat {
 	@JoinColumn(name = "created_by")
 	@ManyToOne
 	private User createdBy;
-	
+
 	@ManyToMany
-	private Set<User> users=new HashSet<>();
-	
+	@JoinTable(name = "chat_users", joinColumns = @JoinColumn(name = "chat_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
+	private Set<User> users = new HashSet<>();
+
 	@OneToMany
-	private List<Message>messages=new ArrayList<>();
+	private List<Message> messages = new ArrayList<>();
 }
-
-
